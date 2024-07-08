@@ -4,7 +4,9 @@
 namespace api\components;
 
 
-abstract class ApiController
+use yii\rest\Controller;
+
+abstract class ApiController extends Controller
 {
 
 }
