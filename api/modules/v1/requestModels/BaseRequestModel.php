@@ -4,76 +4,43 @@
 namespace api\modules\v1\requestModels;
 
 
-use Yii;
-use yii\base\InvalidConfigException;
-use yii\data\DataFilter;
+use common\components\utils\Utils;
+use ReflectionClass;
+use ReflectionException;
+use yii\base\Model;
+use yii\web\BadRequestHttpException;
 
-abstract class BaseRequestModel extends DataFilter
+abstract class BaseRequestModel extends Model
 {
     /**
-     * @var bool
+     * @inheritDoc
+     *
+     * @throws BadRequestHttpException
      */
-    private $isLoaded = false;
-
-    /**
-     * @var bool
-     */
-    private $isValidated = false;
-
-    /**
-     * @throws InvalidConfigException
-     */
-    public function loadAndValidate()
+    public function __construct($config = [])
     {
-        $requestParams = Yii::$app->getRequest()->getBodyParams();
-        if (empty($requestParams)) {
-            $requestParams = Yii::$app->getRequest()->getQueryParams();
-        }
+        parent::__construct($config);
 
-        $filter = null;
-        if ($this->load($requestParams)) {
-            $this->isLoaded = true;
-        } else {
-            $this->isLoaded = false;
-        }
-
-        $filter = $this->build();
-        if ($filter === false) {
-            $this->isValidated = false;
-        } else {
-            $this->isValidated = true;
+        if (!$this->validate()) {
+            throw new BadRequestHttpException(Utils::errorsToStr($this->getErrors()));
         }
     }
 
     /**
-     * @return bool
+     * @inheritDoc
+     *
+     * @throws ReflectionException
      */
-    public function isLoaded(): bool
+    public function attributes()
     {
-        return $this->isLoaded;
-    }
+        $class = new ReflectionClass($this);
+        $names = [];
+        foreach ($class->getProperties() as $property) {
+            if (!$property->isStatic()) {
+                $names[] = $property->getName();
+            }
+        }
 
-    /**
-     * @param bool $isLoaded
-     */
-    public function setIsLoaded(bool $isLoaded): void
-    {
-        $this->isLoaded = $isLoaded;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isValidated(): bool
-    {
-        return $this->isValidated;
-    }
-
-    /**
-     * @param bool $isValidated
-     */
-    public function setIsValidated(bool $isValidated): void
-    {
-        $this->isValidated = $isValidated;
+        return $names;
     }
 }

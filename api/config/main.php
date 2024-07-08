@@ -1,5 +1,6 @@
 <?php
 
+use api\modules\v1\ApiModule;
 use \yii\web\Request;
 
 $s = DIRECTORY_SEPARATOR;
@@ -17,10 +18,10 @@ return [
     'id' => 'app-api',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'api\controllers',
-    'bootstrap' => ['log'],
+//    'bootstrap' => ['log'],
     'modules' => [
         'v1' => [
-            'class' => 'api\modules\v1\ApiModule',
+            'class' => ApiModule::class,
         ],
     ],
     'components' => [
@@ -42,6 +43,7 @@ return [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
+            'enableSession' => false,
         ],
 //        'session' => [
 //            // this is the name of the session cookie used for login on the api

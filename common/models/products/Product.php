@@ -5,6 +5,7 @@ namespace common\models\products;
 
 
 use common\models\CommonActiveRecord;
+use common\models\query\products\ProductQuery;
 use yii\base\InvalidConfigException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
@@ -49,6 +50,15 @@ class Product extends CommonActiveRecord
             [['category_id', 'created_at', 'updated_at'], 'integer'],
             [['price'], 'double']
         ];
+    }
+
+    /**
+     * @inheritdoc
+     * @return ProductQuery the active query used by this AR class.
+     */
+    public static function find(): ProductQuery
+    {
+        return new ProductQuery(get_called_class());
     }
 
     /**

@@ -50,8 +50,8 @@ class Utils
     {
         $errorMessage = '';
 
-        foreach ($errors as $error) {
-            $errorMessage .= $error[0] . '<br>';
+        foreach ($errors as $key => $error) {
+            $errorMessage .= $key . ": " . $error[0] . " ";
         }
 
         return $errorMessage;

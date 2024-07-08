@@ -23,7 +23,7 @@ class ProductTag extends CommonActiveRecord
 {
     public static function tableName()
     {
-        return '{{%product}}';
+        return '{{%product_tag}}';
     }
 
     public function rules()

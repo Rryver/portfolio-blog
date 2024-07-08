@@ -25,7 +25,7 @@ class Tag extends CommonActiveRecord
 {
     public static function tableName()
     {
-        return '{{%product}}';
+        return '{{%tag}}';
     }
 
     public function behaviors()
